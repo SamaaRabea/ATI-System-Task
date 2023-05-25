@@ -1,0 +1,140 @@
+<div class="row mx-4 pb-5">
+  <div class=" text-center fs-3 py-3 fw-bold">{{actionButton}} Task</div>
+  <!-- ////////////////////////////////product form////////////////////////////////// -->
+  <form class="row container" [formGroup]="taskForm">
+
+    <!-- //////////////////Task Name//////////////////////////////// -->
+    <div class="form-group col-sm-6 mt-2">
+      <label>Task Name</label>
+      <input type="text" class="form-control" formControlName="TaskName" placeholder="Task Name"/>
+        <span *ngIf="taskForm.get('TaskName')?.touched && taskForm.get('TaskName')?.hasError('required')" class="error-block">
+          Please enter name
+        </span>
+    </div>
+
+    <!-- ////////////////////////////Date//////////////////////////////// -->
+    <div class="row g-3 py-1 px-2">
+      <div class="form-group col-sm-6">
+        <label for="datepicker">Start Date</label>
+        <input type="date" class="form-control" id="datepicker" name="datepicker" formControlName="StartDate">
+        <span *ngIf="taskForm.get('StartDate')?.touched && taskForm.get('StartDate')?.hasError('required')" class="error-block">
+          Please select a start date.
+        </span>
+      </div>
+      <div class="form-group col-sm-6">
+        <label for="datepicker">End Date</label>
+        <input type="date" class="form-control" id="datepicker" name="datepicker" formControlName="EndDate">
+        <span *ngIf="taskForm.get('EndDate')?.touched && taskForm.get('EndDate')?.hasError('required')" class="error-block">
+          Please select an end date.
+        </span>
+        <mat-error *ngIf="taskForm.get('EndDate')?.errors?.['endDateInvalid']">
+          End date must be greater than or equal to start date.
+        </mat-error>
+      </div>
+    </div>
+
+    <div class="d-flex-row mt-4 col-sm-6">
+
+      <!-- //////////////////estimateTime//////////////////////////////// -->
+      <div class="mb-3">
+        <label>Estmate Time</label>
+        <input type="text"class="form-control" formControlName="EstmateTime" placeholder="Estimate Time"/>
+        <span *ngIf="taskForm.get('EstmateTime')?.touched && taskForm.get('EstmateTime')?.hasError('required')" class="error-block">
+          Please enter an estimate time.
+        </span>
+      </div>
+
+      <!-- ////////////////////////////////////Team Member List///////////////////////////// -->
+      <mat-form-field class="form-group my-2 col-sm-12">
+        <mat-label>Assign To</mat-label>
+        <mat-select formControlName="TeamMemberList" multiple [compareWith]="compareFn">
+          <mat-select-trigger>
+            {{ getSelectedDisplay('TeamMemberList','MemberName') || '' }}
+            <span *ngIf="(taskForm.get('TeamMemberList')?.value?.length || 0) > 1" class="example-additional-selection">
+              (+{{ (taskForm.get('TeamMemberList')?.value?.length || 0) - 1 }}
+              {{ (taskForm.get('TeamMemberList')?.value?.length === 2) ? 'other' : 'others' }})
+            </span>
+          </mat-select-trigger>
+          <mat-option *ngFor="let member of memberList" [value]="member">
+            {{ member.MemberName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field><br>
+
+      <!-- //////////////////////////////tools list /////////////////////////////////////// -->
+      <mat-form-field class="form-group my-2 col-sm-12">
+        <mat-label>Tools</mat-label>
+        <mat-select formControlName="ProjectTools" multiple [compareWith]="compareFn">
+          <mat-select-trigger>
+            {{ getSelectedDisplay('ProjectTools','ToolName') || '' }}
+            <span *ngIf="(taskForm.value.ProjectTools?.length || 0) > 1" class="example-additional-selection">
+              (+{{ (taskForm.value.ProjectTools?.length || 0) - 1 }}
+              {{taskForm.value.ProjectTools?.length === 2 ? "other" : "others" }})
+            </span>
+          </mat-select-trigger>
+          <mat-option *ngFor="let tool of toolList" [value]="tool" >
+            {{ tool.ToolName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+
+    <!-- /////////////////attach to task//////////////////// -->
+    <div class="divHeader mx-3 text-center fs-5 py-3">Attached to Task</div>
+    <div class="d-flex justify-content-between py-4">
+      <mat-radio-group
+        aria-labelledby="example-radio-group-label"
+        class="example-radio-group col-sm-3"
+        >
+        <mat-radio-button class="example-radio-button" *ngFor="let season of seasons" [value]="season">
+          {{season}}
+        </mat-radio-button>
+      </mat-radio-group>
+
+      <div class="d-flex flex-column col-sm-6 mx-3 align-items-center">
+        <label class="text-center">Select Task</label>
+        <mat-form-field class="form-group my-2 col-12">
+        <mat-label>Task List </mat-label>
+        <mat-select name="task" formControlName="ParentTaskID">
+          <mat-option *ngFor="let task of tasks" [value]="task.TaskID">
+            {{task.TaskName}}
+          </mat-option>
+        </mat-select>
+        </mat-form-field><br>
+      </div>
+
+    </div>
+
+    <!-- /////////////////////////////////Task steps/////////////////////////////////// -->
+    <div class="divHeader mx-3 text-center fs-5 py-3">Task steps</div>
+    <div class="py-4">
+      <div *ngFor="let step of taskStepsList" class="d-flex justify-content-between px-2 m-1 shadow-sm" >
+        <div>
+          <h4>{{step}}</h4>
+        </div>
+        <button mat-icon-button color="warn" (click)="deleteStep(step)">
+          <mat-icon>delete</mat-icon>
+        </button>
+
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center px-2 mb-4">
+        <div class="d-flex col-sm-6">
+          <input type="text" class="form-control col-sm-5" formControlName="TaskSteps" placeholder="Task Steps">
+        </div>
+        <div class="form-group">
+          <button type="button" mat-raised-button color="primary" class="px-4" (click)="addStep()">Add</button>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="form-group col-12 my-4 text-end mt-4">
+      <button type="button" class="btn btn-primary mt-4" mat-raised-button color="accent" (click)="onSubmit()">
+        {{actionButton}}
+      </button>
+    </div>
+
+  </form>
+</div>

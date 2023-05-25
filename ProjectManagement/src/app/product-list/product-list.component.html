@@ -1,0 +1,19 @@
+<div class="p-5">
+  <div class="projectListHeader">
+    <h1>
+     Projects
+   </h1>
+   <mat-form-field>
+     <mat-label>Select a project</mat-label>
+     <mat-select [(value)]="selectedProject">
+       <mat-option *ngFor="let project of projects" [value]="project" (click)="transferTasks(project)">
+         {{ project.ProjectName }}
+       </mat-option>
+     </mat-select>
+   </mat-form-field>
+  </div>
+   <div>
+    <app-nav-bar></app-nav-bar>
+    <router-outlet></router-outlet>
+   </div>
+ </div>

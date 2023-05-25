@@ -1,0 +1,29 @@
+<div class="border-end border-bottom border-start p-4">
+  <div class="d-flex flex-row-reverse">
+      <button [disabled]="!selectedProject" mat-raised-button color="primary" class="addTaskButton" (click)="openDialog()">Add New Task</button>
+  </div>
+  <table class="table my-4" >
+    <thead class="table p-2 tableHeader">
+      <tr>
+      <th>Active Task</th>
+      <th>Tasks</th>
+      <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of tasks">
+      <td>
+        <section class="example-section">
+          <mat-checkbox class="example-margin" [checked]="task.IsActive"></mat-checkbox>
+        </section>
+      </td>
+      <td>{{task.TaskName}}</td>
+      <td>
+        <button type="button" class="btn btn-link" (click)="editProject(task)">Update</button>|
+        <button type="button" class="btn btn-link" (click)="deleteTask(task.TaskID)">Delete</button>
+      </td>
+       </tr>
+    </tbody>
+  </table>
+
+</div>

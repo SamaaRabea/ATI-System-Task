@@ -1,0 +1,35 @@
+.ng-invalid.ng-touched{
+  border-color: red;
+}
+.error-block{
+  color: red;
+}
+.dataFont{
+  font-style: 15px;
+}
+.versionForm{
+ border-radius: 2%;background-color: #F7F7F7;padding-top: 5px;
+}
+.versuonList{
+  background-color: #ffffff;border-radius: 2%;
+}
+.example-additional-selection {
+  opacity: 0.75;
+  font-size: 0.75em;
+}
+
+.example-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+  align-items: flex-start;
+}
+
+.example-radio-button {
+  margin: 5px;
+}
+
+.divHeader
+{
+  background-color: #eeeded;
+}
